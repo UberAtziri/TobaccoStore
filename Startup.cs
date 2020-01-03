@@ -55,7 +55,7 @@ namespace TobaccoStore
             
             services.AddDbContext<TobaccoContext>(options =>
             {
-                options.UseSqlite("Data Source=Tobacco.db");
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

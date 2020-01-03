@@ -11,48 +11,48 @@ namespace TobaccoStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TobaccoController : ControllerBase
+    public class OrderController : ControllerBase
     {
         private readonly TobaccoContext _context;
 
-        public TobaccoController(TobaccoContext context)
+        public OrderController(TobaccoContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tobacco
+        // GET: api/Order
         [HttpGet]
-        public async Task<ActionResult<List<TobaccoModel>>> GetTobacco()
+        public async Task<ActionResult<IEnumerable<OrderModel>>> GetOrders()
         {
-            return await _context.Tobacco.ToListAsync();
+            return await _context.Orders.ToListAsync();
         }
 
-        // GET: api/Tobacco/5
+        // GET: api/Order/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TobaccoModel>> GetTobaccoModel(int id)
+        public async Task<ActionResult<OrderModel>> GetOrderModel(int id)
         {
-            var tobaccoModel = await _context.Tobacco.FindAsync(id);
+            var orderModel = await _context.Orders.FindAsync(id);
 
-            if (tobaccoModel == null)
+            if (orderModel == null)
             {
                 return NotFound();
             }
 
-            return tobaccoModel;
+            return orderModel;
         }
 
-        // PUT: api/Tobacco/5
+        // PUT: api/Order/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTobaccoModel(int id, TobaccoModel tobaccoModel)
+        public async Task<IActionResult> PutOrderModel(int id, OrderModel orderModel)
         {
-            if (id != tobaccoModel.Id)
+            if (id != orderModel.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tobaccoModel).State = EntityState.Modified;
+            _context.Entry(orderModel).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace TobaccoStore.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TobaccoModelExists(id))
+                if (!OrderModelExists(id))
                 {
                     return NotFound();
                 }
@@ -73,37 +73,37 @@ namespace TobaccoStore.Controllers
             return NoContent();
         }
 
-        // POST: api/Tobacco
+        // POST: api/Order
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TobaccoModel>> PostTobaccoModel(TobaccoModel tobaccoModel)
+        public async Task<ActionResult<OrderModel>> PostOrderModel(OrderModel orderModel)
         {
-            _context.Tobacco.Add(tobaccoModel);
+            _context.Orders.Add(orderModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTobaccoModel", new { id = tobaccoModel.Id }, tobaccoModel);
+            return CreatedAtAction("GetOrderModel", new { id = orderModel.Id }, orderModel);
         }
 
-        // DELETE: api/Tobacco/5
+        // DELETE: api/Order/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TobaccoModel>> DeleteTobaccoModel(int id)
+        public async Task<ActionResult<OrderModel>> DeleteOrderModel(int id)
         {
-            var tobaccoModel = await _context.Tobacco.FindAsync(id);
-            if (tobaccoModel == null)
+            var orderModel = await _context.Orders.FindAsync(id);
+            if (orderModel == null)
             {
                 return NotFound();
             }
 
-            _context.Tobacco.Remove(tobaccoModel);
+            _context.Orders.Remove(orderModel);
             await _context.SaveChangesAsync();
 
-            return tobaccoModel;
+            return orderModel;
         }
 
-        private bool TobaccoModelExists(int id)
+        private bool OrderModelExists(int id)
         {
-            return _context.Tobacco.Any(e => e.Id == id);
+            return _context.Orders.Any(e => e.Id == id);
         }
     }
 }
