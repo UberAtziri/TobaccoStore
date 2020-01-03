@@ -12,5 +12,7 @@ namespace TobaccoStore.Models
             : base(options)
         { }
         public DbSet<TobaccoModel> Tobacco { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<OrderModel> Orders { get; set; }
     }
 }
