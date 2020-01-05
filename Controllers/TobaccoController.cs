@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace TobaccoStore.Controllers
 
         // GET: api/Tobacco
         [HttpGet]
+        [EnableQuery()]
         public async Task<ActionResult<List<TobaccoModel>>> GetTobacco()
         {
             return await _context.Tobacco.ToListAsync();
