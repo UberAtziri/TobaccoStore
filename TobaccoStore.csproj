@@ -5,15 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200102101920_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200102101920_InitialCreate.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />

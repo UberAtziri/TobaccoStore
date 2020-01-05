@@ -12,49 +12,49 @@ namespace TobaccoStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TobaccoController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly TobaccoContext _context;
 
-        public TobaccoController(TobaccoContext context)
+        public UserController(TobaccoContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tobacco
+        // GET: api/User
         [HttpGet]
         [EnableQuery()]
-        public async Task<ActionResult<List<TobaccoModel>>> GetTobacco()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Tobacco.ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
-        // GET: api/Tobacco/5
+        // GET: api/User/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TobaccoModel>> GetTobaccoModel(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            var tobaccoModel = await _context.Tobacco.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
 
-            if (tobaccoModel == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return tobaccoModel;
+            return user;
         }
 
-        // PUT: api/Tobacco/5
+        // PUT: api/User/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTobaccoModel(int id, TobaccoModel tobaccoModel)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != tobaccoModel.Id)
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tobaccoModel).State = EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +62,7 @@ namespace TobaccoStore.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TobaccoModelExists(id))
+                if (!UserExists(id))
                 {
                     return NotFound();
                 }
@@ -75,37 +75,37 @@ namespace TobaccoStore.Controllers
             return NoContent();
         }
 
-        // POST: api/Tobacco
+        // POST: api/User
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TobaccoModel>> PostTobaccoModel(TobaccoModel tobaccoModel)
+        public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Tobacco.Add(tobaccoModel);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTobaccoModel", new { id = tobaccoModel.Id }, tobaccoModel);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Tobacco/5
+        // DELETE: api/User/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TobaccoModel>> DeleteTobaccoModel(int id)
+        public async Task<ActionResult<User>> DeleteUser(int id)
         {
-            var tobaccoModel = await _context.Tobacco.FindAsync(id);
-            if (tobaccoModel == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Tobacco.Remove(tobaccoModel);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return tobaccoModel;
+            return user;
         }
 
-        private bool TobaccoModelExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Tobacco.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
