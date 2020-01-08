@@ -22,11 +22,11 @@ namespace TobaccoStore.Controllers
         }
 
         // GET: api/Tobacco
-        [HttpGet]
-        [EnableQuery()]
+        [HttpGet, EnableQuery]
+        
         public async Task<ActionResult<List<TobaccoModel>>> GetTobacco()
         {
-            return await _context.Tobacco.ToListAsync();
+            return await _context.getTobacco();
         }
 
         // GET: api/Tobacco/5

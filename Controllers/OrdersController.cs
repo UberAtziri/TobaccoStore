@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TobaccoStore.Models;
+using TobaccoStore;
 
 namespace TobaccoStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly TobaccoContext _context;
 
-        public OrderController(TobaccoContext context)
+        public OrdersController(TobaccoContext context)
         {
             _context = context;
         }
@@ -25,16 +26,16 @@ namespace TobaccoStore.Controllers
         [HttpGet]
         [EnableQuery()]
 
-        public async Task<ActionResult<IEnumerable<OrderModel>>> GetOrders()
+        public async Task<ActionResult<List<OrderModel>>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.getOrders();
         }
 
         // GET: api/Order/5
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderModel>> GetOrderModel(int id)
         {
-            var orderModel = await _context.Orders.FindAsync(id);
+            var orderModel = await _context.Orders.Include(i=>i.Customer).Include(i=>i.Purchases).FirstOrDefaultAsync(i=>i.Id == id);
 
             if (orderModel == null)
             {

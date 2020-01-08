@@ -12,11 +12,11 @@ namespace TobaccoStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly TobaccoContext _context;
 
-        public UserController(TobaccoContext context)
+        public UsersController(TobaccoContext context)
         {
             _context = context;
         }
@@ -24,9 +24,9 @@ namespace TobaccoStore.Controllers
         // GET: api/User
         [HttpGet]
         [EnableQuery()]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<List<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.getUsers();
         }
 
         // GET: api/User/5

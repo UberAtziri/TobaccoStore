@@ -17,8 +17,8 @@ namespace TobaccoStore.Controllers
     {
         private List<User> users = new List<User>
         {
-            new User {Login="admin@gmail.com", Password="12345", Role="admin"},
-            new User {Login="qwerty@gmail.com", Password="55555", Role="user"}
+            new User {Login="admin@gmail.com", Password="12345", Role=Role.Admin},
+            new User {Login="qwerty@gmail.com", Password="55555", Role=Role.User}
         };
 
         [HttpPost("/token")]
@@ -58,7 +58,7 @@ namespace TobaccoStore.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

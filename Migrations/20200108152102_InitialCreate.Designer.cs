@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TobaccoStore.Models;
 
 namespace TobaccoStore.Migrations
 {
     [DbContext(typeof(TobaccoContext))]
-    partial class TobaccoContextModelSnapshot : ModelSnapshot
+    [Migration("20200108152102_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +36,8 @@ namespace TobaccoStore.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TobaccoId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
@@ -55,15 +59,10 @@ namespace TobaccoStore.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TobaccoId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("isOnStock")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TobaccoId");
 
                     b.ToTable("Tobacco");
                 });
@@ -100,16 +99,13 @@ namespace TobaccoStore.Migrations
 
             modelBuilder.Entity("TobaccoStore.Models.OrderModel", b =>
                 {
+                    b.HasOne("TobaccoStore.Models.TobaccoModel", "Purchase")
+                        .WithMany()
+                        .HasForeignKey("TobaccoId");
+
                     b.HasOne("TobaccoStore.Models.User", "Customer")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("TobaccoStore.Models.TobaccoModel", b =>
-                {
-                    b.HasOne("TobaccoStore.Models.OrderModel", null)
-                        .WithMany("Purchases")
-                        .HasForeignKey("TobaccoId");
                 });
 #pragma warning restore 612, 618
         }

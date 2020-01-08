@@ -58,7 +58,7 @@ namespace TobaccoStore
             
             services.AddDbContext<TobaccoContext>(options =>
             {
-                options.UseSqlite("DataSource =file:///C:/Code/tobacco.db");
+                options.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = Tobacco5; Trusted_Connection = True");
             });
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -79,7 +79,6 @@ namespace TobaccoStore
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
 
             app.UseReact(config => { });
 
@@ -96,8 +95,8 @@ namespace TobaccoStore
         {
             var odataBuilder = new ODataConventionModelBuilder();
             odataBuilder.EntitySet<TobaccoModel>("Tobacco");
-            odataBuilder.EntitySet<User>("User");
-            odataBuilder.EntitySet<OrderModel>("Order");
+            odataBuilder.EntitySet<User>("Users");
+            odataBuilder.EntitySet<OrderModel>("Orders");
 
             return odataBuilder.GetEdmModel();
         }
