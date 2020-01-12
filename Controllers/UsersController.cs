@@ -6,7 +6,8 @@ using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TobaccoStore.Models;
+using TobaccoStore.Data;
+using TobaccoStore.Entities;
 
 namespace TobaccoStore.Controllers
 {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using TobaccoStore.Models;
+using TobaccoStore.Entities;
 
 namespace TobaccoStore.Controllers
 {

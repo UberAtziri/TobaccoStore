@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNet.OData.Builder;
 
-namespace TobaccoStore.Models
+namespace TobaccoStore.Entities
 {
     public class OrderModel
     {
@@ -13,7 +13,7 @@ namespace TobaccoStore.Models
         public int? TobaccoId { get; set; }
         [ForeignKey("TobaccoId")]
         [AutoExpand]
-        public List<TobaccoModel> Purchases { get; set; }
+        public List<TobaccoEntity> Purchases { get; set; }
         public int? UserId { get; set; }
         [ForeignKey("UserId")]
         [AutoExpand]

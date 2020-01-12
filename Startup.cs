@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using TobaccoStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using React.AspNet;
@@ -23,6 +22,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.OData.Edm;
 using Microsoft.AspNet.OData.Builder;
+using TobaccoStore.Data;
+using TobaccoStore.MappingProfile;
+using AutoMapper;
+using TobaccoStore.Entities;
 
 namespace TobaccoStore
 {
@@ -62,10 +65,13 @@ namespace TobaccoStore
             });
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ITobaccoRepository, TobaccoSqlRepository>();
             services.AddReact();
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
             services.AddControllers(mvcOptions =>
                 mvcOptions.EnableEndpointRouting = false);
+            services.AddAutoMapper(typeof(TobaccoMappings));
+
             services.AddOData();
         }
 
@@ -94,7 +100,7 @@ namespace TobaccoStore
         IEdmModel GetEdmModel()
         {
             var odataBuilder = new ODataConventionModelBuilder();
-            odataBuilder.EntitySet<TobaccoModel>("Tobacco");
+            odataBuilder.EntitySet<TobaccoEntity>("Tobacco");
             odataBuilder.EntitySet<User>("Users");
             odataBuilder.EntitySet<OrderModel>("Orders");
 

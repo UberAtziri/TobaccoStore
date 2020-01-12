@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace TobaccoStore.Models
+namespace TobaccoStore.Entities
 {
     public class User
     {
@@ -21,7 +21,7 @@ namespace TobaccoStore.Models
     }
     public enum Role
     {
-        Admin,
+        Admin = 1,
         User
     }
 }

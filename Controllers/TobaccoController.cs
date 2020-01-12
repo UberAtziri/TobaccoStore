@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TobaccoStore.Models;
+using TobaccoStore.Entities;
+using TobaccoStore.Data;
+using TobaccoStore.DTO;
 
 namespace TobaccoStore.Controllers
 {
@@ -14,98 +17,108 @@ namespace TobaccoStore.Controllers
     [ApiController]
     public class TobaccoController : ControllerBase
     {
-        private readonly TobaccoContext _context;
+        private readonly ITobaccoRepository _tobacco;
+        private readonly IMapper _mapper;
 
-        public TobaccoController(TobaccoContext context)
+        public TobaccoController(
+            ITobaccoRepository tobacco,
+            IMapper mapper)
         {
-            _context = context;
+            _tobacco = tobacco;
+            _mapper = mapper;
         }
 
         // GET: api/Tobacco
         [HttpGet, EnableQuery]
         
-        public async Task<ActionResult<List<TobaccoModel>>> GetTobacco()
+        public  ActionResult<List<TobaccoEntity>> GetTobacco()
         {
-            return await _context.getTobacco();
+            return _tobacco.GetAll();
         }
 
         // GET: api/Tobacco/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TobaccoModel>> GetTobaccoModel(int id)
+        public ActionResult<TobaccoEntity> GetSingleTobacco(int id)
         {
-            var tobaccoModel = await _context.Tobacco.FindAsync(id);
+            var tobacco =  _tobacco.GetSingle(id);
 
-            if (tobaccoModel == null)
+            if (tobacco == null)
             {
                 return NotFound();
             }
 
-            return tobaccoModel;
+            return tobacco;
         }
 
-        // PUT: api/Tobacco/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        //PUT: api/Tobacco/5
+        //To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        //more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTobaccoModel(int id, TobaccoModel tobaccoModel)
+        public ActionResult<TobaccoDto> UpdateTobacco(int id, [FromBody] TobaccoUpdateDto tobaccoUpdate)
         {
-            if (id != tobaccoModel.Id)
+           if (tobaccoUpdate == null)
+           {
+               return BadRequest();
+           }
+
+           var existingTobaccoItem = _tobacco.GetSingle(id);
+           if(existingTobaccoItem == null)
+           {
+               return NotFound();
+           }
+
+            _mapper.Map(tobaccoUpdate, existingTobaccoItem);
+
+            _tobacco.Update(id, existingTobaccoItem);
+            if(!_tobacco.Save())
+            {
+                throw new Exception ("Updating an item failed on save.");
+            }
+            return Ok(_mapper.Map<TobaccoDto>(existingTobaccoItem));
+        }
+
+        //POST: api/Tobacco
+        //To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        //more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        public ActionResult<TobaccoEntity> PostTobacco(TobaccoCreateDto tobaccoCreate)
+        {
+            if(tobaccoCreate == null)
             {
                 return BadRequest();
             }
-
-            _context.Entry(tobaccoModel).State = EntityState.Modified;
-
-            try
+            TobaccoEntity toAdd = _mapper.Map<TobaccoEntity>(tobaccoCreate);
+            _tobacco.Add(toAdd);
+            if(!_tobacco.Save())
             {
-                await _context.SaveChangesAsync();
+                throw new Exception("Creating a tobacco failed on save");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TobaccoModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Tobacco
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<TobaccoModel>> PostTobaccoModel(TobaccoModel tobaccoModel)
-        {
-            _context.Tobacco.Add(tobaccoModel);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTobaccoModel", new { id = tobaccoModel.Id }, tobaccoModel);
+            TobaccoEntity newTobacco = _tobacco.GetSingle(toAdd.Id);
+            return CreatedAtRoute(nameof(GetSingleTobacco), _mapper.Map<TobaccoDto>(newTobacco));
+           
         }
 
         // DELETE: api/Tobacco/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TobaccoModel>> DeleteTobaccoModel(int id)
+        public ActionResult<TobaccoEntity> DeleteTobacco(int id)
         {
-            var tobaccoModel = await _context.Tobacco.FindAsync(id);
-            if (tobaccoModel == null)
-            {
-                return NotFound();
-            }
+           TobaccoEntity tobaccoItem = _tobacco.GetSingle(id);
+           if(tobaccoItem == null)
+           {
+               return BadRequest();
+           }
+           _tobacco.Delete(id);
 
-            _context.Tobacco.Remove(tobaccoModel);
-            await _context.SaveChangesAsync();
-
-            return tobaccoModel;
+           if(!_tobacco.Save())
+           {
+               throw new Exception("Deleting tobacco failde on save");
+           }
+           return NoContent();
         }
 
-        private bool TobaccoModelExists(int id)
+        private bool isTobaccoExists(int id)
         {
-            return _context.Tobacco.Any(e => e.Id == id);
+           return _tobacco.Exist(id);
         }
     }
 }
