@@ -11,6 +11,11 @@ namespace TobaccoStore.MappingProfile
             CreateMap<TobaccoEntity, TobaccoDto>().ReverseMap();
             CreateMap<TobaccoEntity, TobaccoUpdateDto>().ReverseMap();
             CreateMap<TobaccoEntity, TobaccoCreateDto>().ReverseMap();
+            CreateMap<UserEntity, UserDTO>().ReverseMap();
+            CreateMap<UserEntity, UserCreateDTO>().ReverseMap();
+            CreateMap<UserEntity, UserUpdateDto>().ReverseMap();
+
+
         }
     }
 }

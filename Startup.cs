@@ -26,6 +26,7 @@ using TobaccoStore.Data;
 using TobaccoStore.MappingProfile;
 using AutoMapper;
 using TobaccoStore.Entities;
+using TobaccoStore.Data.EFCore;
 
 namespace TobaccoStore
 {
@@ -61,16 +62,19 @@ namespace TobaccoStore
             
             services.AddDbContext<TobaccoContext>(options =>
             {
-                options.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = Tobacco5; Trusted_Connection = True");
+                options.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = Tobacco; Trusted_Connection = True");
             });
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ITobaccoRepository, TobaccoSqlRepository>();
+            services.AddScoped<EFCoreTobaccoRepository>();
+            services.AddScoped<EFCoreUsersRepository>();
+            services.AddScoped<EFCoreRoleRepository>();
+            services.AddScoped<EFCoreOrderRepository>();
             services.AddReact();
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
             services.AddControllers(mvcOptions =>
                 mvcOptions.EnableEndpointRouting = false);
-            services.AddAutoMapper(typeof(TobaccoMappings));
+            //services.AddAutoMapper(typeof(TobaccoMappings));
 
             services.AddOData();
         }
@@ -93,16 +97,20 @@ namespace TobaccoStore
             app.UseStaticFiles();
             app.UseMvc(routeBuilder =>
             {
+                routeBuilder.EnableDependencyInjection();
                 routeBuilder.Select().Expand().Filter().OrderBy().Count();
                 routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
+               // routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                
             });
         }
         IEdmModel GetEdmModel()
         {
             var odataBuilder = new ODataConventionModelBuilder();
             odataBuilder.EntitySet<TobaccoEntity>("Tobacco");
-            odataBuilder.EntitySet<User>("Users");
-            odataBuilder.EntitySet<OrderModel>("Orders");
+            odataBuilder.EntitySet<UserEntity>("Users");
+            odataBuilder.EntitySet<OrderEntity>("Orders");
+            odataBuilder.EntitySet<RoleEntity>("Roles");
 
             return odataBuilder.GetEdmModel();
         }

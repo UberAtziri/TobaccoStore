@@ -6,20 +6,20 @@ using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TobaccoStore.Entities;
-using TobaccoStore;
+using TobaccoStore.Controllers;
 using TobaccoStore.Data;
 using TobaccoStore.Data.EFCore;
+using TobaccoStore.Entities;
 
-namespace TobaccoStore.Controllers
+namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersController : BaseController<OrderEntity, EFCoreOrderRepository>
+    public class RolesController : BaseController<RoleEntity, EFCoreRoleRepository>
     {
-        public OrdersController(EFCoreOrderRepository repository) : base(repository)
-        {
-            
-        }
+       public RolesController(EFCoreRoleRepository repository) : base(repository)
+       {
+           
+       }
     }
 }

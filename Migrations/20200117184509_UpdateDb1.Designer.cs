@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TobaccoStore.Data;
 
-namespace TobaccoStore.Migrations
+namespace Web.Migrations
 {
     [DbContext(typeof(TobaccoContext))]
-    [Migration("20200108182714_Mymigr")]
-    partial class Mymigr
+    [Migration("20200117184509_UpdateDb1")]
+    partial class UpdateDb1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace TobaccoStore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TobaccoStore.Models.OrderModel", b =>
+            modelBuilder.Entity("TobaccoStore.Entities.OrderEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,22 @@ namespace TobaccoStore.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("TobaccoStore.Models.TobaccoModel", b =>
+            modelBuilder.Entity("TobaccoStore.Entities.RoleEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("TobaccoStore.Entities.TobaccoEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +85,7 @@ namespace TobaccoStore.Migrations
                     b.ToTable("Tobacco");
                 });
 
-            modelBuilder.Entity("TobaccoStore.Models.User", b =>
+            modelBuilder.Entity("TobaccoStore.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,26 +107,35 @@ namespace TobaccoStore.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TobaccoStore.Models.OrderModel", b =>
+            modelBuilder.Entity("TobaccoStore.Entities.OrderEntity", b =>
                 {
-                    b.HasOne("TobaccoStore.Models.User", "Customer")
+                    b.HasOne("TobaccoStore.Entities.UserEntity", "Customer")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("TobaccoStore.Models.TobaccoModel", b =>
+            modelBuilder.Entity("TobaccoStore.Entities.TobaccoEntity", b =>
                 {
-                    b.HasOne("TobaccoStore.Models.OrderModel", null)
+                    b.HasOne("TobaccoStore.Entities.OrderEntity", null)
                         .WithMany("Purchases")
                         .HasForeignKey("TobaccoId");
+                });
+
+            modelBuilder.Entity("TobaccoStore.Entities.UserEntity", b =>
+                {
+                    b.HasOne("TobaccoStore.Entities.RoleEntity", "UserRole")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
                 });
 #pragma warning restore 612, 618
         }

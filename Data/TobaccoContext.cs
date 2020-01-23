@@ -15,16 +15,14 @@ namespace TobaccoStore.Data
             : base(options)
         { }
         public DbSet<TobaccoEntity> Tobacco { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<OrderModel> Orders { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<RoleEntity> Roles {get; set;}
 
-        //HTTP GET
-        public async Task<ActionResult<List<User>>> getUsers()
-        {
-            return await Users.ToListAsync();
-        }
+        
+       
 
-        public async Task<ActionResult<List<OrderModel>>> getOrders()
+        public async Task<ActionResult<List<OrderEntity>>> getOrders()
         {
             return await Orders.Include(i=>i.Customer).Include(i=>i.Purchases).ToListAsync();
         }

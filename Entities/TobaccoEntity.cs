@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using TobaccoStore.Data;
 
 namespace TobaccoStore.Entities
 {
-    public class TobaccoEntity
+    public class TobaccoEntity : IEntity
     {
         [Required]
         public int Id { get; set; }

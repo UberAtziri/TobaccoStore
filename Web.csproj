@@ -25,5 +25,9 @@
     <PackageReference Include="React.AspNet" Version="5.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TobaccoStore\Migrations\" />
+  </ItemGroup>
+
 
 </Project>
